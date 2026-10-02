@@ -5,9 +5,9 @@ import { medirPing, medirDescarga, MAX_BLOQUES } from '@/lib/medidor';
 const USOS = [
   { nombre: 'WhatsApp y navegación web', mbps: 0.5 },
   { nombre: 'YouTube calidad SD',        mbps: 1.5 },
-  { nombre: 'Videollamada (Zoom/Meet)',  mbps: 3 },
-  { nombre: 'YouTube / Netflix en HD',   mbps: 5 },
-  { nombre: 'Netflix en 4K',             mbps: 25 },
+  { nombre: 'tiktok o algo asi',  mbps: 3 },
+  { nombre: 'No se w voy a buscar mas ejemplo para poner aqui segun lo necesario en Mbps mas luego ',   mbps: 5 },
+  { nombre: 'Una partida sin lag de MBL :v',             mbps: 25 },
 ];
 
 const TEXTO_ESTADO = {
