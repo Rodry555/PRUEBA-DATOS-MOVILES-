@@ -233,7 +233,7 @@ function Tarjeta({ titulo, valor, unidad, detalle }) {
   );
 }
 
-function Acordeon({ titulo, hijos, estaAbierto, alToggle }) {
+function Acordeon({ titulo, children, estaAbierto, alToggle }) {
   return (
     <div className="w-full max-w-sm border border-zinc-800 rounded-xl overflow-hidden bg-zinc-900/50">
       <button
@@ -256,7 +256,7 @@ function Acordeon({ titulo, hijos, estaAbierto, alToggle }) {
         className="overflow-hidden transition-all duration-300 ease-out"
         style={{ maxHeight: estaAbierto ? '500px' : '0px', opacity: estaAbierto ? 1 : 0 }}
       >
-        <div className="px-3 pb-3">{hijos}</div>
+        <div className="px-3 pb-3">{children}</div>
       </div>
     </div>
   );
