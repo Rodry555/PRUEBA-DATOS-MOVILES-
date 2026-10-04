@@ -42,6 +42,8 @@ export default function Pagina() {
   const [bloques, setBloques] = useState(0);
   const [enVivo, setEnVivo] = useState(false);
   const [tecnologia, setTecnologia] = useState('4g');
+  const [openUsos, setOpenUsos] = useState(false);
+  const [openEscalera, setOpenEscalera] = useState(false);
 
   const ocupado = estado === 'ping' || estado === 'descarga';
   const usosAlcanzados =
@@ -168,44 +170,50 @@ export default function Pagina() {
         {ocupado ? 'Midiendo…' : 'Iniciar prueba'}
       </button>
 
+      {consumo !== null && !enVivo && (
+        <p className="text-xs text-zinc-500 text-center w-full max-w-sm">
+          Esta prueba consumió ~{consumo.toFixed(1)} MB de datos
+        </p>
+      )}
+
       {nivel && (
-        <p className={`text-sm ${nivel.color}`}>{nivel.texto}</p>
+        <p className={`text-sm ${nivel.color} text-center`}>{nivel.texto}</p>
       )}
 
       {veredicto && (
-        <p className={`text-sm ${veredicto.ok ? 'text-emerald-400' : 'text-red-400'}`}>
+        <p className={`text-sm ${veredicto.ok ? 'text-emerald-400' : 'text-red-400'} text-center`}>
           {veredicto.texto}
         </p>
       )}
 
       {usosAlcanzados && usosAlcanzados.length > 0 && (
-        <section className="w-full max-w-sm">
-          <h2 className="text-sm text-zinc-500 mb-2">Tu velocidad alcanza para:</h2>
+        <Acordeon
+          titulo={`Tu velocidad alcanza para: (${usosAlcanzados.length})`}
+          estaAbierto={openUsos}
+          alToggle={() => setOpenUsos(!openUsos)}
+        >
           <ul className="text-sm text-zinc-300 space-y-1">
             {usosAlcanzados.map((u) => (
               <li key={u.nombre}>✓ {u.nombre}</li>
             ))}
           </ul>
-        </section>
+        </Acordeon>
       )}
 
       {mbps !== null && !enVivo && (
-        <section className="w-full max-w-sm">
-          <h2 className="text-sm text-zinc-500 mb-2">Cómo se compara tu velocidad:</h2>
+        <Acordeon
+          titulo="Cómo se compara tu velocidad:"
+          estaAbierto={openEscalera}
+          alToggle={() => setOpenEscalera(!openEscalera)}
+        >
           <ul className="text-sm space-y-1">
             {PELDANOS.map((p) => (
-              <li key={p.nombre} className={p.mbps <= mbps ? 'text-emerald-400' : 'text-zinc-500'}>
+              <li key={p.nombre} className={p.mbps <= mbps ? 'text-emerald-400' : 'text-red-400'}>
                 {p.mbps <= mbps ? '✓' : '✗'} {p.nombre} — {fmt(p.mbps)}
               </li>
             ))}
           </ul>
-        </section>
-      )}
-
-      {consumo !== null && (
-        <p className="text-xs text-zinc-500">
-          Esta prueba consumió ~{consumo.toFixed(1)} MB de datos
-        </p>
+        </Acordeon>
       )}
 
       </main>
@@ -221,6 +229,35 @@ function Tarjeta({ titulo, valor, unidad, detalle }) {
         {valor} <span className="text-sm text-zinc-400">{unidad}</span>
       </p>
       {detalle && <p className="text-xs text-zinc-500 mt-1">{detalle}</p>}
+    </div>
+  );
+}
+
+function Acordeon({ titulo, hijos, estaAbierto, alToggle }) {
+  return (
+    <div className="w-full max-w-sm border border-zinc-800 rounded-xl overflow-hidden bg-zinc-900/50">
+      <button
+        onClick={alToggle}
+        className="w-full flex items-center justify-between p-3 text-left hover:bg-zinc-800/50 transition-colors"
+        aria-expanded={estaAbierto}
+      >
+        <h2 className="text-sm font-medium text-zinc-400">{titulo}</h2>
+        <svg
+          className="w-4 h-4 text-zinc-500 transition-transform duration-300 ease-out"
+          style={{ transform: estaAbierto ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div
+        className="overflow-hidden transition-all duration-300 ease-out"
+        style={{ maxHeight: estaAbierto ? '500px' : '0px', opacity: estaAbierto ? 1 : 0 }}
+      >
+        <div className="px-3 pb-3">{hijos}</div>
+      </div>
     </div>
   );
 }
